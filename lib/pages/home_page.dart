@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'profile_page.dart';
+import 'dersler/turkce_page.dart';
+import 'dersler/matematik_page.dart';
+import 'dersler/tarih_page.dart';
+import 'dersler/cografya_page.dart';
+import 'dersler/vatandaslik_page.dart';
+import 'dersler/english_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,6 +29,36 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _selectedIndex = idx;
     });
+  }
+
+  void _openCard(String title) {
+    Widget? page;
+    switch (title) {
+      case 'Türkçe':
+        page = const TurkcePage();
+        break;
+      case 'Matematik':
+        page = const MatematikPage();
+        break;
+      case 'Tarih':
+        page = const TarihPage();
+        break;
+      case 'Coğrafya':
+        page = const CografyaPage();
+        break;
+      case 'Vatandaşlık':
+        page = const VatandaslikPage();
+        break;
+      case 'English':
+        page = const EnglishPage();
+        break;
+      default:
+        page = null;
+    }
+
+    if (page != null) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => page!));
+    }
   }
 
   @override
@@ -86,36 +122,40 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 18),
 
-            // Category cards stacked in single column
+            // Category cards stacked in single column (tappable)
             Column(
               children: _cards.map((c) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: c['color'],
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0,3))],
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(color: Colors.white70, borderRadius: BorderRadius.circular(10), boxShadow: [
-                            BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0,2)),
-                          ]),
-                          child: Icon(c['icon'], size: 36, color: Theme.of(context).primaryColor),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Center(
-                            child: Text(c['title'], textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: () => _openCard(c['title']),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: c['color'],
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0,3))],
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(color: Colors.white70, borderRadius: BorderRadius.circular(10), boxShadow: [
+                              BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0,2)),
+                            ]),
+                            child: Icon(c['icon'], size: 36, color: Theme.of(context).primaryColor),
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Center(
+                              child: Text(c['title'], textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
