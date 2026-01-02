@@ -10,14 +10,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-
   final List<Map<String, dynamic>> _cards = [
-    {'title': 'Temel İşlemler', 'color': const Color(0xFFF0DEF8), 'progress': '12 / 100', 'icon': Icons.calculate, 'pillColor': Color(0xFF7E57C2)},
-    {'title': 'Şekiller ve Geometri', 'color': const Color(0xFFD8F3F4), 'progress': '12 / 100', 'icon': Icons.crop_square, 'pillColor': Color(0xFF00A8CC)},
-    {'title': 'Şekiller ve Geometri', 'color': const Color(0xFFDFF6E9), 'progress': '12 / 100', 'icon': Icons.category, 'pillColor': Color(0xFF00B894)},
-    {'title': 'Temel İşlemler', 'color': const Color(0xFFFFF3CC), 'progress': '12 / 100', 'icon': Icons.calculate, 'pillColor': Color(0xFFEBB02D)},
-    {'title': 'Temel İşlemler', 'color': const Color(0xFFFFE6D6), 'progress': '12 / 100', 'icon': Icons.calculate, 'pillColor': Color(0xFFFB8C00)},
-    {'title': 'Şekiller ve Geometri', 'color': const Color(0xFFF9D8E8), 'progress': '12 / 100', 'icon': Icons.category, 'pillColor': Color(0xFFD6336C)},
+    {'title': 'Türkçe', 'color': const Color(0xFFF9D8E8), 'icon': Icons.menu_book, 'pillColor': Color(0xFFE06BAF)},
+    {'title': 'Matematik', 'color': const Color(0xFFF0DEF8), 'icon': Icons.calculate, 'pillColor': Color(0xFF7E57C2)},
+    {'title': 'Tarih', 'color': const Color(0xFFFFF3CC), 'icon': Icons.history_edu, 'pillColor': Color(0xFFEBB02D)},
+    {'title': 'Coğrafya', 'color': const Color(0xFFD8F3F4), 'icon': Icons.public, 'pillColor': Color(0xFF00A8CC)},
+    {'title': 'Vatandaşlık', 'color': const Color(0xFFDFF6E9), 'icon': Icons.how_to_reg, 'pillColor': Color(0xFF00B894)},
+    {'title': 'English', 'color': const Color(0xFFE8F6FF), 'icon': Icons.language, 'pillColor': Color(0xFF5DA9FF)},
   ];
 
   void _onNavTap(int idx) {
@@ -29,7 +28,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final cardWidth = (width - 16 * 2 - 12) / 2;
 
     Widget homeContent = SafeArea(
       child: SingleChildScrollView(
@@ -37,21 +35,9 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              decoration: BoxDecoration(
-                color: const Color(0xFF3EC1B7),
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0,3)),
-                ],
-              ),
-              child: const Text('Ana Sayfa', style: TextStyle(color: Colors.white, fontSize: 12)),
-            ),
+            const SizedBox.shrink(),
             const SizedBox(height: 18),
             const Text('Merhaba Halil :)', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            const Text("Asla pes etme", style: TextStyle(fontSize: 14, color: Colors.black54)),
             const SizedBox(height: 20),
 
             // Big purple card with illustration and Start button
@@ -71,25 +57,9 @@ class _HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text('10 günlük seri', style: TextStyle(color: Colors.white70)),
                         const SizedBox(height: 6),
                         const Text('Günlük görev', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
                         const SizedBox(height: 14),
-                        Row(
-                          children: [
-                            ElevatedButton.icon(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFFFD200),
-                                foregroundColor: Colors.black,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-                              ),
-                              icon: const Icon(Icons.play_arrow),
-                              label: const Text('Başla'),
-                            ),
-                          ],
-                        )
                       ],
                     ),
                   ),
@@ -116,40 +86,37 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 18),
 
-            // Grid of category cards (2 columns)
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
+            // Category cards stacked in single column
+            Column(
               children: _cards.map((c) {
-                return Container(
-                  width: cardWidth,
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: c['color'],
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0,3))],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(color: Colors.white70, borderRadius: BorderRadius.circular(8), boxShadow: [
-                          BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0,2)),
-                        ]),
-                        child: Icon(c['icon'], size: 22, color: Colors.blue.shade800),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(c['title'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                      const SizedBox(height: 10),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        decoration: BoxDecoration(color: c['pillColor'], borderRadius: BorderRadius.circular(20), boxShadow: [
-                          BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0,2)),
-                        ]),
-                        child: Text(c['progress'], style: const TextStyle(color: Colors.white, fontSize: 12)),
-                      ),
-                    ],
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: c['color'],
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0,3))],
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(color: Colors.white70, borderRadius: BorderRadius.circular(10), boxShadow: [
+                            BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0,2)),
+                          ]),
+                          child: Icon(c['icon'], size: 36, color: Theme.of(context).primaryColor),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Center(
+                            child: Text(c['title'], textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               }).toList(),
