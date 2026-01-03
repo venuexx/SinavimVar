@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
+import 'dart:async';
 import 'profile_page.dart';
 import 'dersler/turkce_page.dart';
 import 'dersler/matematik_page.dart';
@@ -8,7 +10,7 @@ import 'dersler/vatandaslik_page.dart';
 import 'dersler/english_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -16,6 +18,30 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  final List<String> _quotes = [
+    'Bugün çalış, yarın rahat et.',
+    'Az da olsa her gün ilerle.',
+    'Disiplin, motivasyondan üstündür.',
+    'Vazgeçmediğin sürece kazanırsın.',
+    'Şu an zor, ama geçecek.',
+    'Bir soru, bir adım ileri.',
+    'Erteleme, başla.',
+    'Emek asla boşa gitmez.',
+    'Hedefini hatırla.',
+    'Bugünkü sen, yarınki seni kurtarır.',
+    'Küçük adımlar büyük sonuçlar doğurur.',
+    'Çalışmak özgüven kazandırır.',
+    'Bahane değil, çözüm üret.',
+    'Kendinle yarış.',
+    'Bugün pes etme günü değil.',
+    'Zorlanıyorsan doğru yoldasın.',
+    'Başarı tekrar ister.',
+    'Şimdi çalış, sonra gurur duy.',
+    'Konfor alanı başarı getirmez.',
+    'İnan, odaklan, devam et.'
+  ];
+  late String _currentQuote;
+  Timer? _quoteTimer;
   final List<Map<String, dynamic>> _cards = [
     {'title': 'Türkçe', 'color': const Color(0xFFF9D8E8), 'icon': Icons.menu_book, 'pillColor': Color(0xFFE06BAF)},
     {'title': 'Matematik', 'color': const Color(0xFFF0DEF8), 'icon': Icons.calculate, 'pillColor': Color(0xFF7E57C2)},
@@ -62,8 +88,26 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _currentQuote = _quotes[Random().nextInt(_quotes.length)];
+    _quoteTimer = Timer.periodic(const Duration(seconds: 5), (_) => _nextQuote());
+  }
+
+  void _nextQuote() {
+    setState(() {
+      _currentQuote = _quotes[Random().nextInt(_quotes.length)];
+    });
+  }
+
+  @override
+  void dispose() {
+    _quoteTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
 
     Widget homeContent = SafeArea(
       child: SingleChildScrollView(
@@ -71,53 +115,41 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox.shrink(),
-            const SizedBox(height: 18),
-            const Text('Merhaba Halil :)', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 20),
+            const SizedBox(height: 6),
 
-            // Big purple card with illustration and Start button
+            // Big purple card with greeting and rotating quote
             Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(colors: [Color(0xFF8E63FF), Color(0xFFD99BFF)]),
-                borderRadius: BorderRadius.circular(18),
-                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0,6))],
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 6),
-                        const Text('Günlük görev', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 14),
-                      ],
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(colors: [Color(0xFF8E63FF), Color(0xFFD99BFF)]),
+                  borderRadius: BorderRadius.circular(18),
+                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0,6))],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 6),
+                    const Text(
+                      'Merhaba Halil :)',
+                      style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  // Illustration placeholder
-                  Expanded(
-                    flex: 2,
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Container(
-                        width: 120,
-                        height: 90,
-                        decoration: BoxDecoration(
-                          color: Colors.white24,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Center(child: Icon(Icons.park, color: Colors.white70, size: 36)),
+                    const SizedBox(height: 12),
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 500),
+                      transitionBuilder: (Widget child, Animation<double> animation) {
+                        return FadeTransition(opacity: animation, child: child);
+                      },
+                      child: Text(
+                        _currentQuote,
+                        key: ValueKey<String>(_currentQuote),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(color: Colors.white70, fontSize: 16, fontStyle: FontStyle.italic),
                       ),
                     ),
-                  )
-                ],
-              ),
+                    const SizedBox(height: 6),
+                  ],
+                ),
             ),
 
             const SizedBox(height: 18),
