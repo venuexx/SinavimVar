@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'dart:async';
 import 'profile_page.dart';
+import 'bilgi_page.dart';
+import 'harita_oyunlari_page.dart';
 import 'dersler/turkce_page.dart';
 import 'dersler/matematik_page.dart';
 import 'dersler/tarih_page.dart';
@@ -48,7 +50,13 @@ class _HomePageState extends State<HomePage> {
     {'title': 'Tarih', 'color': const Color(0xFFFFF3CC), 'icon': Icons.history_edu, 'pillColor': Color(0xFFEBB02D)},
     {'title': 'Coğrafya', 'color': const Color(0xFFD8F3F4), 'icon': Icons.public, 'pillColor': Color(0xFF00A8CC)},
     {'title': 'Vatandaşlık', 'color': const Color(0xFFDFF6E9), 'icon': Icons.how_to_reg, 'pillColor': Color(0xFF00B894)},
-    {'title': 'English', 'color': const Color(0xFFE8F6FF), 'icon': Icons.language, 'pillColor': Color(0xFF5DA9FF)},
+  ];
+
+  final List<Map<String, dynamic>> _homeCards = [
+    {'title': 'Bilgi Kartları', 'color': const Color(0xFFFFFFFF), 'icon': Icons.credit_card, 'bg': const Color(0xFF8E63FF)},
+    {'title': 'Haritalar', 'color': const Color(0xFFFFFFFF), 'icon': Icons.map, 'bg': const Color(0xFF7ED321)},
+    {'title': 'İngilizce Kelimeler', 'color': const Color(0xFFFFFFFF), 'icon': Icons.language, 'bg': const Color(0xFF5DA9FF)},
+    {'title': 'Harita Oyunları', 'color': const Color(0xFFFFFFFF), 'icon': Icons.sports_esports, 'bg': const Color(0xFFFFA726)},
   ];
 
   void _onNavTap(int idx) {
@@ -154,37 +162,45 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 18),
 
-            // Category cards stacked in single column (tappable)
-            Column(
-              children: _cards.map((c) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(12),
-                    onTap: () => _openCard(c['title']),
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: c['color'],
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0,3))],
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+            // Grid of main square cards (2 columns)
+            GridView.count(
+              crossAxisCount: 2,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 1,
+              children: _homeCards.map((hc) {
+                return InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: () {
+                    final t = hc['title'] as String;
+                    if (t == 'Bilgi Kartları') {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BilgiPage()));
+                    } else if (t == 'Haritalar') {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CografyaPage()));
+                    } else if (t == 'İngilizce Kelimeler') {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const EnglishPage()));
+                    } else if (t == 'Harita Oyunları') {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const HaritaOyunlariPage()));
+                    }
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: [hc['bg'], hc['bg'].withOpacity(0.8)]),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0,3))],
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(color: Colors.white70, borderRadius: BorderRadius.circular(10), boxShadow: [
-                              BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0,2)),
-                            ]),
-                            child: Icon(c['icon'], size: 36, color: Theme.of(context).primaryColor),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Center(
-                              child: Text(c['title'], textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                            ),
+                          Icon(hc['icon'], size: 42, color: Colors.white),
+                          const SizedBox(height: 10),
+                          Text(
+                            hc['title'],
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
                           ),
                         ],
                       ),

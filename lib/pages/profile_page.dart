@@ -20,16 +20,6 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              decoration: BoxDecoration(
-                color: const Color(0xFF3EC1B7),
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0,3))],
-              ),
-              child: const Text('Profil', style: TextStyle(color: Colors.white, fontSize: 12)),
-            ),
-
             const SizedBox(height: 20),
 
             Center(
